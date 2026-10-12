@@ -1,0 +1,26 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+  <Dialog id="orderDialog" title="{vm>/editorHeading}" contentWidth="72rem" resizable="true" draggable="true" horizontalScrolling="false" busy="{vm>/saving}" busyIndicatorDelay="0">
+    <content><VBox class="orderEditorContent">
+      <MessageStrip text="Review the supplier and line items, then save your draft. The total and approval route will be calculated for you." type="Information" showIcon="true" class="sapUiSmallMarginBottom"/>
+      <HBox wrap="Wrap" class="editorHeader">
+        <VBox class="editorField"><Label text="Request title" required="true" labelFor="draftTitle"/><Input id="draftTitle" value="{vm>/editor/title}" maxLength="120" placeholder="e.g. Replacement motors for line A"/></VBox>
+        <VBox class="editorField"><Label text="Supplier" required="true" labelFor="draftSupplier"/><Select id="draftSupplier" selectedKey="{vm>/editor/supplierID}" items="{vm>/suppliers}" width="100%"><items><core:Item key="{vm>ID}" text="{vm>label}"/></items></Select></VBox>
+      </HBox>
+      <OverflowToolbar style="Clear"><Title text="Purchase order lines" level="H3" titleStyle="H5"/><ToolbarSpacer/><Button text="Add line" icon="sap-icon://add" press=".onAddLine"/></OverflowToolbar>
+      <Table items="{vm>/editor/items}" class="editorTable" noDataText="Add at least one line.">
+        <columns><Column><Text text="Description"/></Column><Column width="6rem"><Text text="Quantity"/></Column><Column width="8rem"><Text text="Unit price · EUR"/></Column><Column minScreenWidth="Tablet" demandPopin="true" width="11rem"><Text text="Delivery date"/></Column><Column width="3rem"><Text text=""/></Column></columns>
+        <items><ColumnListItem><cells>
+          <Input value="{vm>description}" maxLength="120" placeholder="Line description" ariaLabelledBy="lineDescriptionLabel"/>
+          <Input value="{vm>quantity}" type="Number" placeholder="1.000" ariaLabelledBy="lineQuantityLabel"/>
+          <Input value="{vm>unitPrice}" type="Number" placeholder="0.00" ariaLabelledBy="linePriceLabel"/>
+          <DatePicker value="{vm>deliveryDate}" valueFormat="yyyy-MM-dd" displayFormat="medium" ariaLabelledBy="lineDateLabel"/>
+          <Button icon="sap-icon://delete" type="Transparent" tooltip="Remove line" press=".onRemoveLine"/>
+        </cells></ColumnListItem></items>
+      </Table>
+      <core:InvisibleText id="lineDescriptionLabel" text="Line description"/><core:InvisibleText id="lineQuantityLabel" text="Quantity"/><core:InvisibleText id="linePriceLabel" text="Unit price in EUR"/><core:InvisibleText id="lineDateLabel" text="Delivery date"/>
+      <Text text="Up to 100 lines. Positive quantities up to 3 decimal places; positive prices up to 2. Changes remain in this dialog until you save." class="editorSummary"/>
+    </VBox></content>
+    <beginButton><Button text="Save draft" type="Emphasized" press=".onSaveDraft"/></beginButton>
+    <endButton><Button text="Cancel" press=".onCancelDraft"/></endButton>
+  </Dialog>
+</core:FragmentDefinition>

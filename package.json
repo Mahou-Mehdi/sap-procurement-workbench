@@ -1,0 +1,75 @@
+{
+  "name": "sap-procurement-workbench",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SAP CAP and OpenUI5 purchasing workflows with a durable integration outbox and an explicit local ERP simulator.",
+  "license": "MIT",
+  "author": "Mahou Mehdi",
+  "engines": {
+    "node": ">=22.15.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "start:erp": "node mock/erp-server.js",
+    "db:init": "node scripts/init-db.js",
+    "build:ui": "ui5 build --all --include-task generateVersionInfo --dest app/workbench/dist",
+    "build": "npm run build:ui && cds build",
+    "test": "node --test --test-concurrency=1 test/*.test.js"
+  },
+  "dependencies": {
+    "@cap-js/sqlite": "3.1.2",
+    "@sap/cds": "10.1.1",
+    "express": "5.3.0"
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "10.1.0",
+    "@ui5/cli": "4.0.71"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "runtime/procurement.sqlite"
+        }
+      },
+      "auth": {
+        "kind": "basic",
+        "users": {
+          "buyer": {
+            "password": "demo",
+            "roles": [
+              "Buyer"
+            ]
+          },
+          "approver": {
+            "password": "demo",
+            "roles": [
+              "Approver"
+            ]
+          },
+          "manager": {
+            "password": "demo",
+            "roles": [
+              "Approver",
+              "Manager"
+            ]
+          },
+          "integrator": {
+            "password": "demo",
+            "roles": [
+              "IntegrationOperator"
+            ]
+          },
+          "auditor": {
+            "password": "demo",
+            "roles": [
+              "Auditor"
+            ]
+          },
+          "*": false
+        }
+      }
+    }
+  }
+}

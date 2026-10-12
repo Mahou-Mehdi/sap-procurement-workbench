@@ -1,0 +1,7 @@
+ID;order_ID;timestamp;actor;action;fromStatus;toStatus;details
+30000000-0000-4000-8000-000000000001;10000000-0000-4000-8000-000000000001;2026-10-12T08:00:00Z;seed;SEED;;DRAFT;Original fictional seed record for a normal draft.
+30000000-0000-4000-8000-000000000002;10000000-0000-4000-8000-000000000002;2026-10-12T08:05:00Z;seed;SEED;;SUBMITTED;Original fictional seed state requiring manager approval because its value exceeds EUR 10000.
+30000000-0000-4000-8000-000000000003;10000000-0000-4000-8000-000000000003;2026-10-12T08:10:00Z;seed;SEED;;SUBMITTED;Original fictional seed state requiring manager approval because the supplier is high risk.
+30000000-0000-4000-8000-000000000004;10000000-0000-4000-8000-000000000004;2026-10-12T08:15:00Z;seed;SEED;;APPROVED;Original fictional seed state ready for integration queue demonstration.
+30000000-0000-4000-8000-000000000005;10000000-0000-4000-8000-000000000005;2026-10-12T08:20:00Z;seed;SEED;;REJECTED;Original fictional rejected seed state: duplicate request already covered by another order.
+30000000-0000-4000-8000-000000000006;10000000-0000-4000-8000-000000000006;2026-10-12T08:25:00Z;seed;SEED;;DRAFT;Original fictional seed record illustrating the blocked supplier submission rule.

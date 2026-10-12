@@ -1,0 +1,101 @@
+<mvc:View controllerName="mehdi.procurement.controller.App" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:l="sap.ui.layout" displayBlock="true">
+  <App><Page showHeader="false" class="procurementPage" busy="{vm>/busy}" busyIndicatorDelay="150">
+    <content>
+      <f:ShellBar title="Procurement" secondTitle="Operations workbench" showMenuButton="false">
+        <f:additionalContent>
+          <Label text="Local demo persona" labelFor="persona" class="personaLabel"/>
+          <Select id="persona" selectedKey="{vm>/persona}" change=".onPersonaChange" width="12rem" tooltip="Switch local demonstration role">
+            <items><core:Item key="buyer" text="Buyer"/><core:Item key="approver" text="Approver"/><core:Item key="manager" text="Manager"/><core:Item key="integrator" text="Integration operator"/><core:Item key="auditor" text="Auditor · read only"/></items>
+          </Select>
+        </f:additionalContent>
+      </f:ShellBar>
+      <VBox class="workbenchContent">
+        <HBox justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap" class="heroRow">
+          <VBox><Text text="PURCHASING OPERATIONS" class="eyebrow"/><Title text="Procurement workbench" level="H1" titleStyle="H2" class="heroTitle"/><Text text="From purchase request to approval and ERP handoff, with every transition recorded." class="heroLead"/></VBox>
+          <VBox alignItems="End"><ObjectStatus text="{vm>/connectionLabel}" state="{vm>/connectionState}" icon="sap-icon://connected"/><Text text="{vm>/lastRefresh}" class="mutedText"/></VBox>
+        </HBox>
+        <MessageStrip text="Local demonstration · Fictional suppliers and orders. Persona switching uses mock identity; ERP export targets the included mock gateway." type="Information" showIcon="true" class="demoNote"/>
+        <MessageStrip text="{vm>/error}" visible="{= !!${vm>/error} }" type="Error" showIcon="true" showCloseButton="true" close=".onDismissError" class="errorStrip"/>
+        <HBox wrap="Wrap" class="metricRow">
+          <VBox class="metricCard totalCard"><ObjectNumber number="{vm>/metrics/total}"/><Text text="TOTAL ORDER VALUE · EUR"/></VBox>
+          <VBox class="metricCard"><ObjectNumber number="{vm>/metrics/pending}"/><Text text="AWAITING APPROVAL"/></VBox>
+          <VBox class="metricCard"><ObjectNumber number="{vm>/metrics/approved}"/><Text text="READY FOR EXPORT"/></VBox>
+          <VBox class="metricCard"><ObjectNumber number="{vm>/metrics/exportAttention}"/><Text text="EXPORTS TO REVIEW"/></VBox>
+        </HBox>
+        <IconTabBar id="mainTabs" expanded="true" stretchContentHeight="false" class="workbenchTabs">
+          <items>
+            <IconTabFilter key="orders" text="Purchase orders" count="{vm>/metrics/count}" icon="sap-icon://sales-order">
+              <VBox>
+                <OverflowToolbar style="Clear">
+                  <Title text="Orders" level="H2"/><ToolbarSpacer/>
+                  <SearchField id="orderSearch" placeholder="Search order, title or supplier" width="23rem" value="{vm>/query}" liveChange=".onSearch" search=".onSearch" class="toolbarSearch"/>
+                  <Select id="statusFilter" selectedKey="{vm>/filter}" change=".onFilter" tooltip="Filter by order status">
+                    <items><core:Item key="ALL" text="All statuses"/><core:Item key="DRAFT" text="Draft"/><core:Item key="SUBMITTED" text="Awaiting approval"/><core:Item key="APPROVED" text="Approved"/><core:Item key="REJECTED" text="Rejected"/><core:Item key="EXPORT_QUEUED" text="Export queued"/><core:Item key="EXPORTED" text="Exported"/><core:Item key="EXPORT_FAILED" text="Export failed"/></items>
+                  </Select>
+                  <Button icon="sap-icon://refresh" text="Refresh" press=".onRefresh"/>
+                  <Button id="createOrder" text="Create draft" type="Emphasized" icon="sap-icon://add" visible="{vm>/isBuyer}" press=".onCreate"/>
+                </OverflowToolbar>
+                <Table id="ordersTable" items="{vm>/filteredOrders}" mode="SingleSelectMaster" selectionChange=".onOrderSelect" growing="true" growingThreshold="12" noDataText="No orders match this view." sticky="ColumnHeaders,HeaderToolbar">
+                  <columns><Column width="12rem"><Text text="Order / request"/></Column><Column minScreenWidth="Tablet" demandPopin="true"><Text text="Supplier"/></Column><Column width="10rem" hAlign="End"><Text text="Amount · EUR"/></Column><Column width="11rem"><Text text="Status"/></Column><Column minScreenWidth="Desktop" demandPopin="true" width="10rem"><Text text="Approval route"/></Column></columns>
+                  <items><ColumnListItem type="Active"><cells>
+                    <ObjectIdentifier title="{vm>orderNumber}" text="{vm>title}"/>
+                    <VBox><Text text="{vm>supplierName}"/><ObjectStatus text="{vm>riskText}" state="{vm>riskState}" class="supplierRisk"/></VBox>
+                    <ObjectNumber number="{vm>amountText}"/>
+                    <ObjectStatus text="{vm>statusText}" state="{vm>statusState}"/>
+                    <Text text="{vm>approvalLabel}"/>
+                  </cells></ColumnListItem></items>
+                </Table>
+                <Text text="{vm>/visibleLabel}" class="mutedText sapUiSmallMarginTop"/>
+                <Panel visible="{vm>/hasSelection}" class="workbenchPanel detailSection">
+                  <headerToolbar><OverflowToolbar><Title text="{vm>/selected/orderNumber}" level="H2"/><Text text="{vm>/selected/revisionText}" class="mutedText"/><ToolbarSpacer/><ObjectStatus text="{vm>/selected/statusText}" state="{vm>/selected/statusState}"/></OverflowToolbar></headerToolbar>
+                  <content>
+                    <HBox justifyContent="SpaceBetween" alignItems="Start" wrap="Wrap" class="detailTop">
+                      <VBox class="detailMeta"><Title text="{vm>/selected/title}" level="H3"/><Text text="{vm>/selected/supplierName}"/><ObjectStatus text="{vm>/selected/riskText}" state="{vm>/selected/riskState}"/><Text text="{vm>/selected/requesterText}" class="mutedText"/><Text text="{vm>/selected/externalText}" visible="{vm>/selected/hasExternal}" class="mutedText"/></VBox>
+                      <VBox alignItems="End"><Text text="ORDER TOTAL" class="detailLabel"/><ObjectNumber number="{vm>/selected/amountText}" unit="EUR" class="detailAmount"/></VBox>
+                    </HBox>
+                    <HBox wrap="Wrap" class="actionBar">
+                      <Button text="Edit draft" icon="sap-icon://edit" visible="{vm>/selected/canEdit}" press=".onEdit"/>
+                      <Button text="Submit for approval" type="Emphasized" visible="{vm>/selected/canSubmit}" press=".onSubmit"/>
+                      <Button text="Approve order" type="Accept" visible="{vm>/selected/canApprove}" press=".onApprove"/>
+                      <Button text="Reject order" type="Reject" visible="{vm>/selected/canReject}" press=".onReject"/>
+                      <Button text="Queue ERP export" type="Emphasized" icon="sap-icon://outbox" visible="{vm>/selected/canQueue}" press=".onQueue"/>
+                      <Button text="Retry failed export" icon="sap-icon://refresh" visible="{vm>/selected/canRetry}" press=".onRetry"/>
+                    </HBox>
+                    <MessageStrip text="{vm>/selected/approvalDescription}" type="{vm>/selected/approvalMessageType}" showIcon="true" class="sapUiSmallMarginBottom"/>
+                    <l:Grid defaultSpan="XL8 L8 M12 S12" hSpacing="1" vSpacing="1" width="100%">
+                      <VBox><layoutData><l:GridData span="XL8 L8 M12 S12"/></layoutData>
+                        <Title text="Order lines" level="H3" titleStyle="H5" class="sapUiSmallMarginBottom"/>
+                        <Table items="{vm>/selected/items}" noDataText="No order lines.">
+                          <columns><Column><Text text="Description"/></Column><Column width="5rem" hAlign="End"><Text text="Quantity"/></Column><Column minScreenWidth="Tablet" demandPopin="true" width="7rem" hAlign="End"><Text text="Unit price"/></Column><Column minScreenWidth="Tablet" demandPopin="true" width="7rem"><Text text="Delivery"/></Column><Column width="8rem" hAlign="End"><Text text="Line total"/></Column></columns>
+                          <items><ColumnListItem><cells><Text text="{vm>description}"/><Text text="{vm>quantity}"/><Text text="{vm>priceText}"/><Text text="{vm>deliveryDate}"/><ObjectNumber number="{vm>lineText}" unit="EUR"/></cells></ColumnListItem></items>
+                        </Table>
+                      </VBox>
+                      <VBox><layoutData><l:GridData span="XL4 L4 M12 S12"/></layoutData>
+                        <Title text="Application audit history" level="H3" titleStyle="H5"/>
+                        <List items="{vm>/selected/events}" showSeparators="Inner" noDataText="No audit events recorded." class="auditList">
+                          <items><CustomListItem><VBox class="auditEntry"><HBox wrap="Wrap" class="auditHeading"><ObjectStatus text="{vm>actionText}" state="Information"/><Text text="{vm>actor}"/></HBox><Text text="{vm>timeText}" class="auditTime"/><Text text="{vm>transitionText}" class="auditTime"/><Text text="{vm>details}" class="auditDetails"/></VBox></CustomListItem></items>
+                        </List>
+                      </VBox>
+                    </l:Grid>
+                  </content>
+                </Panel>
+              </VBox>
+            </IconTabFilter>
+            <IconTabFilter key="integration" text="Integration queue" count="{vm>/jobCount}" icon="sap-icon://chain-link">
+              <VBox>
+                <Text text="Exports keep the approved order details. Retrying reuses the same request to avoid duplicate orders." class="queueIntro"/>
+                <OverflowToolbar style="Clear"><Title text="Export jobs" level="H2"/><ToolbarSpacer/><Button icon="sap-icon://refresh" text="Refresh queue" press=".onRefresh"/><Button id="processNext" icon="sap-icon://media-play" text="Process next export" type="Emphasized" visible="{vm>/isIntegrator}" press=".onProcess"/></OverflowToolbar>
+                <Table items="{vm>/jobs}" growing="true" growingThreshold="15" noDataText="No export jobs yet. Approve an order, then queue it as Integration operator.">
+                  <columns><Column><Text text="Purchase order"/></Column><Column width="8rem"><Text text="Job status"/></Column><Column width="5rem" hAlign="End"><Text text="Attempts"/></Column><Column minScreenWidth="Tablet" demandPopin="true" width="12rem"><Text text="Next attempt / receipt"/></Column><Column minScreenWidth="Tablet" demandPopin="true"><Text text="Last result"/></Column><Column width="5rem"><Text text="Order"/></Column></columns>
+                  <items><ColumnListItem><cells><VBox><Text text="{vm>orderNumber}"/><Text text="{vm>jobShortID}" class="mutedText"/></VBox><ObjectStatus text="{vm>status}" state="{vm>state}"/><Text text="{vm>attempts}"/><Text text="{vm>nextOrReceipt}"/><Text text="{vm>lastError}" wrapping="true"/><Button icon="sap-icon://inspect" tooltip="Open purchase order" press=".onOpenJobOrder"/></cells></ColumnListItem></items>
+                </Table>
+                <MessageStrip text="Only the Integration operator can process or retry exports. A RETRY job must reach its next-attempt time before it can be claimed." type="Information" showIcon="true" class="sapUiSmallMarginTop"/>
+              </VBox>
+            </IconTabFilter>
+          </items>
+        </IconTabBar>
+        <Text text="Mahou Mehdi · SAP CAP + OpenUI5 portfolio implementation · EUR only · Local mock integration" class="footerText"/>
+      </VBox>
+    </content>
+  </Page></App>
+</mvc:View>

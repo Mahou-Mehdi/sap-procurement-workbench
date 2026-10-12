@@ -1,0 +1,17 @@
+node_modules/
+runtime/
+gen/
+app/workbench/dist/
+.env
+.env.*
+!.env.example
+.cdsrc-private.json
+default-env.json
+*.sqlite
+*.sqlite-*
+*.db
+*.log
+coverage/
+.ui5/
+*.tgz
+.DS_Store

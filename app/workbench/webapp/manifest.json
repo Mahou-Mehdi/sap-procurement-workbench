@@ -1,0 +1,17 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "mehdi.procurement",
+    "type": "application",
+    "title": "Procurement Workbench",
+    "description": "A local SAP CAP and OpenUI5 procurement workflow demonstration.",
+    "applicationVersion": { "version": "1.0.0" }
+  },
+  "sap.ui": { "technology": "UI5", "deviceTypes": { "desktop": true, "tablet": true, "phone": true } },
+  "sap.ui5": {
+    "rootView": { "viewName": "mehdi.procurement.view.App", "type": "XML", "id": "app", "async": true },
+    "dependencies": { "minUI5Version": "1.153.0", "libs": { "sap.ui.core": {}, "sap.m": {}, "sap.f": {}, "sap.ui.layout": {} } },
+    "contentDensities": { "compact": true, "cozy": true },
+    "resources": { "css": [{ "uri": "css/style.css" }] }
+  }
+}

@@ -1,0 +1,17 @@
+specVersion: "4.0"
+metadata:
+  name: mehdi.procurement
+type: application
+resources:
+  configuration:
+    paths:
+      webapp: app/workbench/webapp
+framework:
+  name: OpenUI5
+  version: "1.153.0"
+  libraries:
+    - name: sap.ui.core
+    - name: sap.m
+    - name: sap.f
+    - name: sap.ui.layout
+    - name: themelib_sap_horizon

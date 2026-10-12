@@ -1,0 +1,52 @@
+html, body, body > div { height: 100%; }
+.procurementPage { background: #f5f7fa; }
+.workbenchContent { max-width: 1540px; margin: 0 auto; padding: 2rem 2.1rem 2.5rem; box-sizing: border-box; }
+.heroRow { margin-bottom: 1.4rem; gap: 1rem; }
+.heroRow .sapMTitle { font-weight: 700; color: #102d49; }
+.eyebrow { color: #5a7691; font-size: .68rem; font-weight: 700; letter-spacing: .13em; }
+.heroLead { color: #61748a; max-width: 45rem; }
+.heroTitle { margin-top: .4rem; margin-bottom: .5rem; }
+.demoNote { margin-bottom: 1.2rem; }
+.metricRow { gap: 1rem; margin-bottom: 1.4rem; }
+.metricCard { flex: 1 1 12rem; border: 1px solid #dae3ec; border-radius: .8rem; padding: 1.1rem 1.35rem; background: #fff; box-sizing: border-box; min-width: 10rem; }
+.metricCard .sapMObjectNumberText { font-size: 1.75rem; line-height: 2.2rem; color: #14334f; }
+.metricCard .sapMText { color: #5f748b; font-size: .71rem; margin-top: .4rem; }
+.metricCard.totalCard { background: #eaf2fc; border-color: #c4d7f0; }
+.metricCard.totalCard .sapMObjectNumberText { color: #075cad; }
+.workbenchTabs { background: transparent; }
+.workbenchTabs .sapMITBContent { border-radius: 0 0 .8rem .8rem; border: 1px solid #dfe7ef; }
+.workbenchPanel { border: 1px solid #e0e7ed; border-radius: .65rem; overflow: hidden; background: #fff; }
+.workbenchPanel .sapMPanelHdr { color: #12344e; }
+.detailSection { margin-top: 1rem; }
+.detailTop { gap: 1.1rem; padding-bottom: 1rem; border-bottom: 1px solid #e8edf3; }
+.detailMeta { gap: .4rem; }
+.detailAmount .sapMObjectNumberText { font-size: 1.5rem; }
+.actionBar { padding: .7rem 0; gap: .5rem; }
+.detailLabel { color: #6a7b90; font-size: .71rem; }
+.auditList { margin-top: .5rem; }
+.auditEntry { padding: .65rem 0; }
+.auditHeading { gap: .6rem; }
+.auditTime { color: #6a7b90; font-size: .7rem; }
+.auditDetails { color: #506579; margin-top: .25rem; }
+.emptyPanel { padding: 2.5rem 1rem; }
+.emptyPanel .sapUiIcon { color: #8ba9c1; font-size: 2.6rem; margin-bottom: 1rem; }
+.toolbarSearch { max-width: 23rem; }
+.orderEditorContent { padding: 1.2rem 1.5rem; }
+.editorHeader { gap: 1rem; margin-bottom: 1rem; }
+.editorField { flex: 1 1 20rem; }
+.editorField .sapMLabel { margin-bottom: .3rem; }
+.editorTable { margin-top: .7rem; }
+.editorSummary { padding-top: .8rem; color: #63778a; }
+.footerText { font-size: .7rem; color: #6c7f90; margin-top: 1.5rem; }
+.errorStrip { margin-bottom: 1rem; }
+.queueIntro { padding-bottom: 1rem; color: #5e748a; }
+.mutedText { color: #697f93; font-size: .74rem; }
+.supplierRisk { margin-top: .3rem; }
+.personaLabel { color: #53677e; font-size: .72rem; }
+@media (max-width: 800px) {
+  .workbenchContent { padding: 1.1rem .8rem 2rem; }
+  .metricRow { gap: .65rem; }
+  .metricCard { min-width: 8rem; padding: .9rem 1rem; }
+  .metricCard .sapMObjectNumberText { font-size: 1.4rem; }
+  .orderEditorContent { padding: 1rem; }
+}
